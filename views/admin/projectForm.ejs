@@ -1,0 +1,124 @@
+<% layout('layout') -%>
+
+<style>
+  .form-container {
+    max-width: 800px;
+    margin: auto;
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    animation: fadeInUp 0.6s ease;
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .form-title {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    color: #0f172a;
+  }
+
+  label {
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    display: block;
+  }
+
+  input, textarea, select {
+    border-radius: 8px !important;
+    box-shadow: none !important;
+    border: 1px solid #cbd5e1;
+    padding: 0.65rem;
+    font-size: 0.95rem;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 90px;
+  }
+
+  .btn-save {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    font-weight: 600;
+    background: linear-gradient(90deg, #3b82f6, #06b6d4);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+
+  .btn-save:hover {
+    background: linear-gradient(90deg, #2563eb, #0891b2);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(59,130,246,0.25);
+  }
+
+  small {
+    color: #64748b;
+    display: block;
+    margin-top: 0.2rem;
+  }
+</style>
+
+<div class="form-container">
+  <h2 class="form-title">
+    <%= project ? '✏️ Edit Project' : '➕ Add Project' %>
+  </h2>
+
+  <form method="POST" action="/admin/projects">
+    <% if (project) { %>
+      <input type="hidden" name="id" value="<%= project._id %>" />
+    <% } %>
+
+    <div class="mb-3">
+      <label>Title</label>
+      <input name="title" value="<%= project ? project.title : '' %>" class="form-control" placeholder="Enter project title" required>
+    </div>
+
+    <div class="mb-3">
+      <label>Description</label>
+      <textarea name="description" class="form-control" placeholder="Enter project details..."><%= project ? project.description : '' %></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label>Start Date</label>
+      <input name="startDate" type="date" value="<%= project && project.startDate ? project.startDate.toISOString().split('T')[0] : '' %>" class="form-control">
+    </div>
+
+    <div class="mb-3">
+      <label>End Date</label>
+      <input name="endDate" type="date" value="<%= project && project.endDate ? project.endDate.toISOString().split('T')[0] : '' %>" class="form-control">
+    </div>
+
+    <div class="mb-3">
+      <label>Status</label>
+      <select name="status" class="form-control">
+        <option value="Not Started" <%= project && project.status === 'Not Started' ? 'selected' : '' %>>Not Started</option>
+        <option value="In Progress" <%= project && project.status === 'In Progress' ? 'selected' : '' %>>In Progress</option>
+        <option value="Completed" <%= project && project.status === 'Completed' ? 'selected' : '' %>>Completed</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label>Assign Employees</label>
+      <select name="assignedUsers" class="form-control" multiple>
+        <% users.forEach(u => { %>
+          <option value="<%= u._id %>" <%= project && project.assignedUsers && project.assignedUsers.map(String).includes(String(u._id)) ? 'selected' : '' %>>
+            <%= u.name %> - <%= u.email %>
+          </option>
+        <% }) %>
+      </select>
+      <small>Hold Ctrl (Windows) or Cmd (Mac) to select multiple employees.</small>
+    </div>
+
+    <button class="btn-save">💾 Save Project</button>
+  </form>
+</div>

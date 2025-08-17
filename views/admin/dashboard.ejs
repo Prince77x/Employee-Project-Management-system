@@ -1,0 +1,132 @@
+<% layout('layout') -%>
+
+<style>
+  body {
+    background: #f4f6f9;
+  }
+  .dashboard-header {
+    text-align: center;
+    padding: 1.5rem 0;
+    animation: fadeInDown 0.8s ease forwards;
+  }
+  .dashboard-header h1 {
+    font-weight: bold;
+  }
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: fadeInUp 0.8s ease forwards;
+  }
+  .stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .stat-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #4facfe;
+  }
+  .recent-projects {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    padding: 1.5rem;
+    animation: fadeIn 1s ease forwards;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  .recent-projects h3 {
+    margin-bottom: 1rem;
+    font-weight: bold;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 0.5rem;
+  }
+  .project-item {
+    padding: 0.75rem;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background 0.3s ease;
+  }
+  .project-item:hover {
+    background: #f9f9f9;
+  }
+  .project-title {
+    font-weight: bold;
+    color: #4e0303;
+  }
+  .project-meta {
+    font-size: 0.9rem;
+    color: #520303;
+  }
+</style>
+
+<div class="container">
+  <!-- Dashboard Header -->
+  <div class="dashboard-header">
+    <h1>📊 Admin Dashboard</h1>
+    <p class="text-muted">Quick stats and recent project updates</p>
+  </div>
+
+  <!-- Stats Row -->
+  <div class="row g-4 mb-4">
+    <div class="col-md-4">
+      <div class="stat-card">
+        <h5>Total Employees</h5>
+        <div class="stat-number"><%= totalEmployees %></div>
+        <a href="/admin/employees" class="btn btn-primary mt-3">Manage Employees</a>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="stat-card">
+        <h5>Total Projects</h5>
+        <div class="stat-number text-success"><%= totalProjects %></div>
+        <a href="/admin/projects" class="btn btn-success mt-3">Manage Projects</a>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="stat-card">
+        <h5>Recent Updates</h5>
+        <div class="stat-number text-warning"><%= recentProjects.length %></div>
+        <a href="/admin/projects/new" class="btn btn-warning mt-3">Add New Project</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Projects -->
+  <div class="recent-projects">
+    <h3>🗂 Recent Projects</h3>
+    <% if (recentProjects.length === 0) { %>
+      <p class="text-muted">No recent projects found.</p>
+    <% } else { %>
+      <% recentProjects.forEach(p => { %>
+        <div class="project-item d-flex justify-content-between align-items-center">
+          <div>
+            <div class="project-title"><%= p.title %></div>
+            <div class="project-meta">
+              Status: <%= p.status %> | Created by: <%= p.createdBy && p.createdBy.name ? p.createdBy.name : 'Unknown' %>
+            </div>
+          </div>
+          <div>
+            <a href="/admin/projects/<%= p._id %>/edit" class="btn btn-sm btn-outline-primary me-2">Edit</a>
+            <form action="/admin/projects/<%= p._id %>?_method=DELETE" method="POST" style="display:inline">
+              <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this project?')">Delete</button>
+            </form>
+          </div>
+        </div>
+      <% }) %>
+    <% } %>
+  </div>
+</div>

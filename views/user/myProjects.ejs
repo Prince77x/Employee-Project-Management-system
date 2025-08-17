@@ -1,0 +1,102 @@
+<% layout('layout') -%>
+
+<style>
+  /* Page background - same as user dashboard */
+  body {
+    background: linear-gradient(120deg, #87ceeb, #d2b48c);
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  /* Title styling */
+  .page-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    text-align: center;
+    background: linear-gradient(90deg, #8b4513, #87ceeb);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 1.5rem;
+    animation: fadeInDown 0.6s ease;
+  }
+
+  /* Card wrapper */
+  .projects-card {
+    background: #fffaf0;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    animation: fadeInUp 0.7s ease;
+  }
+
+  /* Table styling */
+  .projects-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+    font-weight: bold;
+  }
+
+  .projects-table thead {
+    background: linear-gradient(90deg, #8b4513, #87ceeb);
+    color: white;
+  }
+
+  .projects-table th, 
+  .projects-table td {
+    padding: 0.9rem 1rem;
+    text-align: left;
+  }
+
+  .projects-table tbody tr {
+    background: white;
+    transition: all 0.3s ease;
+  }
+
+  .projects-table tbody tr:nth-child(even) {
+    background: #f8f8f8;
+  }
+
+  .projects-table tbody tr:hover {
+    background: #f0f8ff;
+    transform: translateY(-2px);
+  }
+
+  /* Animations */
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+<div class="projects-card">
+  <h1 class="page-title">My Projects</h1>
+
+  <table class="projects-table">
+    <thead>
+      <tr>
+        <strong> 
+        <th>Title</th>
+        </strong>
+        <th>Status</th>
+        <th>Start</th>
+        <th>End</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% projects.forEach(p => { %>
+        <tr>
+          <td><%= p.title %></td>
+          <td><%= p.status %></td>
+          <td><%= p.startDate ? p.startDate.toISOString().split('T')[0] : '-' %></td>
+          <td><%= p.endDate ? p.endDate.toISOString().split('T')[0] : '-' %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,140 @@
+<% layout('layout') -%>
+
+<!-- Employee List UI -->
+<style>
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    animation: fadeIn 0.5s ease;
+  }
+  .page-header h1 {
+    font-weight: 700;
+    font-size: 1.8rem;
+    color: #0f172a;
+  }
+  .btn-add {
+    background: linear-gradient(90deg, #06b6d4, #3b82f6);
+    color: white;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(59,130,246,0.2);
+    transition: all 0.2s ease;
+  }
+  .btn-add:hover {
+    background: linear-gradient(90deg, #0891b2, #2563eb);
+    transform: translateY(-2px);
+  }
+
+  /* Table styling */
+  .table-container {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+    animation: fadeInUp 0.5s ease;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  thead {
+    background: #f8fafc;
+  }
+  th {
+    font-weight: 600;
+    padding: 12px;
+    color: #334155;
+    font-size: 0.95rem;
+  }
+  td {
+    padding: 12px;
+    color: #475569;
+    vertical-align: middle;
+    font-size: 0.93rem;
+  }
+  tbody tr {
+    transition: background 0.2s ease;
+  }
+  tbody tr:hover {
+    background: #f0f9ff;
+  }
+
+  /* Buttons */
+  .btn-action {
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: 500;
+  }
+  .btn-edit {
+    background: #e0f2fe;
+    color: #0369a1;
+  }
+  .btn-edit:hover {
+    background: #bae6fd;
+  }
+  .btn-delete {
+    background: #fee2e2;
+    color: #b91c1c;
+  }
+  .btn-delete:hover {
+    background: #fecaca;
+  }
+
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+<div class="page-header">
+  <h1>Employees</h1>
+  <a class="btn-add" href="/admin/employees/new">+ Add Employee</a>
+</div>
+
+<div class="table-container">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Designation</th>
+        <th>Department</th>
+        <th style="text-align:center;">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% employees.forEach(emp => { %>
+        <tr>
+          <td><%= emp.name %></td>
+          <td><%= emp.email %></td>
+          <td><%= emp.designation %></td>
+          <td><%= emp.department %></td>
+          <td style="text-align:center;">
+            <a class="btn-action btn-edit" href="/admin/employees/<%= emp._id %>/edit">
+              ✏️ Edit
+            </a>
+            <form method="POST" action="/admin/employees/<%= emp._id %>?_method=DELETE" style="display:inline">
+              <button class="btn-action btn-delete" onclick="return confirm('Delete?')">🗑️ Delete</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+

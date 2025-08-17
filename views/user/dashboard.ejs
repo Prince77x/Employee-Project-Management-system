@@ -1,0 +1,87 @@
+<% layout('layout') -%>
+
+<style>
+  /* Background */
+  body {
+    background: linear-gradient(120deg, #87ceeb, #d2b48c);
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  /* Welcome Card */
+  .welcome-card {
+    background: white;
+    border-radius: 15px;
+    padding: 1.8rem;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    margin-bottom: 2rem;
+    animation: fadeInDown 0.7s ease;
+  }
+
+  .welcome-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    background: linear-gradient(90deg, #8b4513, #87ceeb);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Project List */
+  .project-card {
+    background: white;
+    border-left: 6px solid #87ceeb;
+    padding: 1rem 1.2rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    animation: fadeInUp 0.5s ease forwards;
+  }
+
+  .project-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    border-left-color: #8b4513;
+  }
+
+  .project-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #8b4513;
+  }
+
+  .project-status {
+    font-size: 0.95rem;
+    color: #555;
+  }
+
+  /* Animations */
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+<div class="welcome-card">
+  <h1 class="welcome-title">Welcome, <%= currentUser.name %> 👋</h1>
+  <p class="text-muted">Here are your assigned projects:</p>
+</div>
+
+<% if (myProjects.length > 0) { %>
+  <% myProjects.forEach(p => { %>
+    <div class="project-card">
+      <div class="project-title"><%= p.title %></div>
+      <div class="project-status">Status: <%= p.status %></div>
+    </div>
+  <% }) %>
+<% } else { %>
+  <div class="project-card" style="border-left-color:#ccc;">
+    <div class="project-title">No Projects Assigned</div>
+    <div class="project-status">You currently have no projects assigned.</div>
+  </div>
+<% } %>
